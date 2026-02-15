@@ -5,6 +5,8 @@ from models.model import Model
 from config import image_size
 import matplotlib.pyplot as plt
 import time
+import os
+from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
 input_shape = (image_size[0], image_size[1], 3)
 categories_count = 3
@@ -45,7 +47,7 @@ if __name__ == "__main__":
     # plot_history(history)
     # 
     # Your code should change the number of epochs
-    epochs = 1
+    epochs = 40
     print('* Data preprocessing')
     train_dataset, validation_dataset, test_dataset = get_datasets()
     name = 'basic_model'
@@ -53,12 +55,30 @@ if __name__ == "__main__":
     print('* Training {} for {} epochs'.format(name, epochs))
     model = model_class(input_shape, categories_count)
     model.print_summary()
-    history = model.train_model(train_dataset, validation_dataset, epochs)
+    early_stop = EarlyStopping(
+        monitor="val_accuracy",
+        patience=6,
+        mode="max",
+        restore_best_weights=True,
+    )
+    reduce_lr = ReduceLROnPlateau(
+        monitor="val_accuracy",
+        mode="max",
+        factor=0.5,
+        patience=3,
+        min_lr=1e-5,
+    )
+    history = model.train_model(
+        train_dataset,
+        validation_dataset,
+        epochs,
+    )
     print('* Evaluating {}'.format(name))
     model.evaluate(test_dataset)
     print('* Confusion Matrix for {}'.format(name))
     print(model.get_confusion_matrix(test_dataset))
     model_name = '{}_{}_epochs_timestamp_{}'.format(name, epochs, int(time.time()))
+    os.makedirs("results", exist_ok=True)
     filename = 'results/{}.keras'.format(model_name)
     model.save_model(filename)
     np.save('results/{}.npy'.format(model_name), history)
