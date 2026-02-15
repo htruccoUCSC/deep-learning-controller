@@ -107,8 +107,21 @@ class UserWebcamPlayer:
         # The classification value should be 0, 1, or 2 for neutral, happy or surprise respectively
 
         # return an integer (0, 1 or 2), otherwise the code will throw an error
-        return 1
-        pass
+
+        if not hasattr(self, "_model"):
+            self._model = models.load_model("results/basic_model_40_epochs_timestamp_1771131303.keras")
+
+        resized = cv2.resize(img, image_size)
+        resized = resized.astype("float32") / 255.0
+
+        if len(resized.shape) == 2:
+            resized = np.stack([resized, resized, resized], axis=-1)
+        resized = np.expand_dims(resized, axis=0)
+
+        predictions = self._model.predict(resized, verbose=0)
+
+        emotion = int(np.argmax(predictions[0]))
+        return emotion
     
     def get_move(self, board_state):
         row, col = None, None
