@@ -1,5 +1,7 @@
 # Model 1
 
+## Initial Network
+
 Training basic_model for 1 epochs  
 Model: "sequential"
 _________________________________________________________________
@@ -38,3 +40,12 @@ _________________________________________________________________
 Total params: 144,731  
 Trainable params: 144,731  
 Non-trainable params: 0  
+
+## Plots
+
+![Example Image](Figure_1.png)
+
+## Accuracy of best model
+
+30/30 [==============================] - 3s 88ms/step - loss: 0.9366 - accuracy: 0.7087  
+Test loss: 0.9365782737731934 | Test accuracy: 0.7087024450302124  
