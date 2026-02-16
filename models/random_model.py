@@ -1,7 +1,7 @@
 from models.model import Model
-from keras import Sequential, layers, models
-from keras.layers import Rescaling
-from keras.optimizers import RMSprop, Adam
+from tensorflow.keras import Sequential, layers, models
+from tensorflow.keras.layers.experimental.preprocessing import Rescaling
+from tensorflow.keras.optimizers import RMSprop, Adam
 
 class RandomModel(Model):
     def _define_model(self, input_shape, categories_count):
