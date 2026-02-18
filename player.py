@@ -1,5 +1,5 @@
-from config import BOARD_SIZE, categories, image_size
-from tensorflow.keras import models
+from config import BOARD_SIZE, categories, image_size, pretrained_model_path
+from keras import models
 import numpy as np
 import tensorflow as tf
 
@@ -120,17 +120,19 @@ class UserWebcamPlayer:
         # The classification value should be 0, 1, or 2 for neutral, happy or surprise respectively
 
         # return an integer (0, 1 or 2), otherwise the code will throw an error
+
         if not hasattr(self, "_model"):
-            self._model = models.load_model("results/basic_model_40_epochs_timestamp_1771195657.keras")
+            self._model = models.load_model(pretrained_model_path)
 
         resized = cv2.resize(img, image_size)
-        resized = resized.astype("float32")
+        resized = resized.astype("float32") / 255.0
 
         if len(resized.shape) == 2:
             resized = np.stack([resized, resized, resized], axis=-1)
         resized = np.expand_dims(resized, axis=0)
 
         predictions = self._model.predict(resized, verbose=0)
+
         emotion = int(np.argmax(predictions[0]))
         return emotion
     
