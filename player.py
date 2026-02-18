@@ -51,7 +51,20 @@ class UserWebcamPlayer:
         else:
             rval = False
         while rval:
-            cv2.imshow("preview", frame)
+            display_frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+            emotion = self._get_emotion(frame)
+            label = categories[emotion] if isinstance(emotion, int) else "unknown"
+            cv2.putText(
+                display_frame,
+                label,
+                (10, 30),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1.0,
+                (0, 255, 0),
+                2,
+                cv2.LINE_AA,
+            )
+            cv2.imshow("preview", display_frame)
             rval, frame = vc.read()
             frame = self._process_frame(frame)
             key = cv2.waitKey(20)
