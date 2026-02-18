@@ -4,7 +4,7 @@ from keras.layers import Rescaling
 from keras.optimizers import RMSprop, Adam
 from config import pretrained_model_path
 
-class TransferedModel(Model): 
+class TransferedModel(Model):
     def _define_model(self, input_shape, categories_count):
         # Your code goes here
         # you have to initialize self.model to a keras model
