@@ -12,8 +12,8 @@ categories_count = 2
 # -------------
 
 models = {
-    'transfered_model': TransferedModel,
     'random_model': RandomModel,
+    'transfered_model': TransferedModel,
 }
 
 def plot_history_diff(initial_hist, transfered_hist):

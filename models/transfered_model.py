@@ -2,6 +2,7 @@ from models.model import Model
 from keras import Sequential, layers, models
 from keras.layers import Rescaling
 from keras.optimizers import RMSprop, Adam
+from config import pretrained_model_path
 
 class TransferedModel(Model): 
     def _define_model(self, input_shape, categories_count):
@@ -13,9 +14,7 @@ class TransferedModel(Model):
         # use this model by removing the last layer, adding dense layers and an output layer
         
         # load your trained facial recognition model
-        pretrained = models.load_model(
-            "results/basic_model_40_epochs_timestamp_1771131303.keras"
-        )
+        pretrained = models.load_model(pretrained_model_path)
 
         # eliminate the final softmax layer (which specializes it to a 3-class problem)
         base_model = models.Model(
@@ -28,8 +27,8 @@ class TransferedModel(Model):
 
         # bolt on one or more fully connected layers to perform an arbitrary computation over the features inferred by your facial recognition model
         x = base_model.output
-        x = layers.Dense(24, activation="relu", name="transfer_dense_1")(x)
-        x = layers.Dense(24, activation="relu", name="transfer_dense_2")(x)
+        x = layers.Dense(64, activation="relu", name="transfer_dense_1")(x)
+        x = layers.Dense(48, activation="relu", name="transfer_dense_2")(x)
 
         output = layers.Dense(categories_count, activation="softmax", name="transfer_output")(x)
         self.model = models.Model(inputs=base_model.inputs, outputs=output)

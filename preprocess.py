@@ -34,11 +34,11 @@ def get_transfer_datasets():
     # Your code replaces this by loading the dataset
     # you can use image_dataset_from_directory, similar to how the _split_data function is using it
 
-    transfer_dir = "transfer_images"
+    transfer_dir = "transfer_images_dogcat"
 
     print('train dataset:')
     train_dataset, validation_dataset = image_dataset_from_directory(
-        transfer_dir,
+        f"{transfer_dir}/train",
         label_mode='categorical',
         color_mode='rgb',
         batch_size=batch_size,
@@ -49,7 +49,7 @@ def get_transfer_datasets():
     )
     print('test dataset:')
     test_dataset = image_dataset_from_directory(
-        transfer_dir,
+        f"{transfer_dir}/test",
         label_mode='categorical',
         color_mode='rgb',
         batch_size=batch_size,
